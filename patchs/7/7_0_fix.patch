@@ -1,0 +1,195 @@
+Index: src/test/java/ru/javawebinar/topjava/service/AbstractServiceTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/test/java/ru/javawebinar/topjava/service/AbstractServiceTest.java	(revision f2ed2b9f6738ac6d9f7d2bb01f07ec7d46c02c9d)
++++ src/test/java/ru/javawebinar/topjava/service/AbstractServiceTest.java	(date 1605696828613)
+@@ -23,7 +23,7 @@
+ @RunWith(SpringRunner.class)
+ @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
+ @ActiveProfiles(resolver = ActiveDbProfileResolver.class)
+-abstract public class AbstractServiceTest {
++public abstract class AbstractServiceTest {
+ 
+     @ClassRule
+     public static ExternalResource summary = TimingRules.SUMMARY;
+@@ -32,7 +32,7 @@
+     public Stopwatch stopwatch = TimingRules.STOPWATCH;
+ 
+     //  Check root cause in JUnit: https://github.com/junit-team/junit4/pull/778
+-    public <T extends Throwable> void validateRootCause(Runnable runnable, Class<T> rootExceptionClass) {
++    protected <T extends Throwable> void validateRootCause(Runnable runnable, Class<T> rootExceptionClass) {
+         assertThrows(rootExceptionClass, () -> {
+             try {
+                 runnable.run();
+Index: src/test/java/ru/javawebinar/topjava/service/datajpa/DataJpaUserServiceTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/test/java/ru/javawebinar/topjava/service/datajpa/DataJpaUserServiceTest.java	(revision f2ed2b9f6738ac6d9f7d2bb01f07ec7d46c02c9d)
++++ src/test/java/ru/javawebinar/topjava/service/datajpa/DataJpaUserServiceTest.java	(date 1605541778766)
+@@ -4,19 +4,21 @@
+ import org.junit.Test;
+ import org.springframework.test.context.ActiveProfiles;
+ import ru.javawebinar.topjava.MealTestData;
++import ru.javawebinar.topjava.UserTestData;
+ import ru.javawebinar.topjava.model.User;
+ import ru.javawebinar.topjava.service.AbstractUserServiceTest;
+ import ru.javawebinar.topjava.util.exception.NotFoundException;
+ 
+ import static ru.javawebinar.topjava.Profiles.DATAJPA;
+-import static ru.javawebinar.topjava.UserTestData.*;
++import static ru.javawebinar.topjava.UserTestData.USER_ID;
++import static ru.javawebinar.topjava.UserTestData.USER_MATCHER;
+ 
+ @ActiveProfiles(DATAJPA)
+ public class DataJpaUserServiceTest extends AbstractUserServiceTest {
+     @Test
+     public void getWithMeals() {
+         User user = service.getWithMeals(USER_ID);
+-        USER_MATCHER.assertMatch(user, user);
++        USER_MATCHER.assertMatch(user, UserTestData.user);
+         MealTestData.MEAL_MATCHER.assertMatch(user.getMeals(), MealTestData.meals);
+     }
+ 
+Index: src/main/java/ru/javawebinar/topjava/repository/JpaUtil.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/ru/javawebinar/topjava/repository/JpaUtil.java	(revision f2ed2b9f6738ac6d9f7d2bb01f07ec7d46c02c9d)
++++ src/main/java/ru/javawebinar/topjava/repository/JpaUtil.java	(date 1605696866697)
+@@ -14,9 +14,8 @@
+     public void clear2ndLevelHibernateCache() {
+         Session s = (Session) em.getDelegate();
+         SessionFactory sf = s.getSessionFactory();
+-//        sf.evict(User.class);
+-//        sf.getCache().evictEntity(User.class, BaseEntity.START_SEQ);
+-//        sf.getCache().evictEntityRegion(User.class);
++//        sf.getCache().evictEntityData(User.class, AbstractBaseEntity.START_SEQ);
++//        sf.getCache().evictEntityData(User.class);
+         sf.getCache().evictAllRegions();
+     }
+ }
+Index: src/test/java/ru/javawebinar/topjava/UserTestData.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/test/java/ru/javawebinar/topjava/UserTestData.java	(revision f2ed2b9f6738ac6d9f7d2bb01f07ec7d46c02c9d)
++++ src/test/java/ru/javawebinar/topjava/UserTestData.java	(date 1605696483194)
+@@ -9,7 +9,7 @@
+ import static ru.javawebinar.topjava.model.AbstractBaseEntity.START_SEQ;
+ 
+ public class UserTestData {
+-    public static TestMatcher<User> USER_MATCHER = TestMatcher.usingIgnoringFieldsComparator("registered", "roles", "meals");
++    public static final TestMatcher<User> USER_MATCHER = TestMatcher.usingIgnoringFieldsComparator("registered", "roles", "meals");
+ 
+     public static final int USER_ID = START_SEQ;
+     public static final int ADMIN_ID = START_SEQ + 1;
+Index: src/main/java/ru/javawebinar/topjava/util/DateTimeUtil.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/ru/javawebinar/topjava/util/DateTimeUtil.java	(revision f2ed2b9f6738ac6d9f7d2bb01f07ec7d46c02c9d)
++++ src/main/java/ru/javawebinar/topjava/util/DateTimeUtil.java	(date 1605696455251)
+@@ -32,10 +32,10 @@
+     }
+ 
+     public static @Nullable LocalDate parseLocalDate(@Nullable String str) {
+-        return !StringUtils.hasText(str) ? null : LocalDate.parse(str);
++        return StringUtils.hasText(str) ? LocalDate.parse(str) : null;
+     }
+ 
+     public static @Nullable LocalTime parseLocalTime(@Nullable String str) {
+-        return !StringUtils.hasText(str) ? null : LocalTime.parse(str);
++        return StringUtils.hasText(str) ? LocalTime.parse(str) : null;
+     }
+ }
+Index: src/test/java/ru/javawebinar/topjava/ActiveDbProfileResolver.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/test/java/ru/javawebinar/topjava/ActiveDbProfileResolver.java	(revision f2ed2b9f6738ac6d9f7d2bb01f07ec7d46c02c9d)
++++ src/test/java/ru/javawebinar/topjava/ActiveDbProfileResolver.java	(date 1605696780507)
+@@ -1,12 +1,13 @@
+ package ru.javawebinar.topjava;
+ 
++import org.springframework.lang.NonNull;
+ import org.springframework.test.context.ActiveProfilesResolver;
+ 
+ //http://stackoverflow.com/questions/23871255/spring-profiles-simple-example-of-activeprofilesresolver
+ public class ActiveDbProfileResolver implements ActiveProfilesResolver {
+ 
+     @Override
+-    public String[] resolve(Class<?> aClass) {
++    public @NonNull String[] resolve(@NonNull Class<?> aClass) {
+         return new String[]{Profiles.getActiveDbProfile()};
+     }
+ }
+\ No newline at end of file
+Index: src/test/java/ru/javawebinar/topjava/MealTestData.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/test/java/ru/javawebinar/topjava/MealTestData.java	(revision f2ed2b9f6738ac6d9f7d2bb01f07ec7d46c02c9d)
++++ src/test/java/ru/javawebinar/topjava/MealTestData.java	(date 1605696483190)
+@@ -10,7 +10,7 @@
+ import static ru.javawebinar.topjava.model.AbstractBaseEntity.START_SEQ;
+ 
+ public class MealTestData {
+-    public static TestMatcher<Meal> MEAL_MATCHER = TestMatcher.usingIgnoringFieldsComparator("user");
++    public static final TestMatcher<Meal> MEAL_MATCHER = TestMatcher.usingIgnoringFieldsComparator("user");
+ 
+     public static final int NOT_FOUND = 10;
+     public static final int MEAL1_ID = START_SEQ + 2;
+Index: src/test/java/ru/javawebinar/topjava/web/user/InMemoryAdminRestControllerSpringTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/test/java/ru/javawebinar/topjava/web/user/InMemoryAdminRestControllerSpringTest.java	(revision f2ed2b9f6738ac6d9f7d2bb01f07ec7d46c02c9d)
++++ src/test/java/ru/javawebinar/topjava/web/user/InMemoryAdminRestControllerSpringTest.java	(date 1605696828622)
+@@ -24,7 +24,7 @@
+     private InMemoryUserRepository repository;
+ 
+     @Before
+-    public void setUp() {
++    public void setup() {
+         repository.init();
+     }
+ 
+Index: src/main/webapp/WEB-INF/jsp/mealForm.jsp
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/webapp/WEB-INF/jsp/mealForm.jsp	(revision f2ed2b9f6738ac6d9f7d2bb01f07ec7d46c02c9d)
++++ src/main/webapp/WEB-INF/jsp/mealForm.jsp	(date 1605696483180)
+@@ -1,4 +1,4 @@
+-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
++<%@ page contentType="text/html;charset=UTF-8" %>
+ <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+ 
+ <html>
+Index: src/test/java/ru/javawebinar/topjava/web/user/InMemoryAdminRestControllerTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/test/java/ru/javawebinar/topjava/web/user/InMemoryAdminRestControllerTest.java	(revision f2ed2b9f6738ac6d9f7d2bb01f07ec7d46c02c9d)
++++ src/test/java/ru/javawebinar/topjava/web/user/InMemoryAdminRestControllerTest.java	(date 1605696828630)
+@@ -34,7 +34,7 @@
+     }
+ 
+     @Before
+-    public void setUp() {
++    public void setup() {
+         // re-initialize
+         repository.init();
+     }
