@@ -1,0 +1,51 @@
+Index: src/main/java/ru/javawebinar/topjava/web/MealServlet.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/ru/javawebinar/topjava/web/MealServlet.java	(revision e9c02a9d4997d86654ccbe9d77fe12a5e660d0cb)
++++ src/main/java/ru/javawebinar/topjava/web/MealServlet.java	(date 1602670311460)
+@@ -7,7 +7,6 @@
+ import ru.javawebinar.topjava.repository.inmemory.InMemoryMealRepository;
+ import ru.javawebinar.topjava.util.MealsUtil;
+ 
+-import javax.servlet.ServletConfig;
+ import javax.servlet.ServletException;
+ import javax.servlet.http.HttpServlet;
+ import javax.servlet.http.HttpServletRequest;
+@@ -23,8 +22,7 @@
+     private MealRepository repository;
+ 
+     @Override
+-    public void init(ServletConfig config) throws ServletException {
+-        super.init(config);
++    public void init() {
+         repository = new InMemoryMealRepository();
+     }
+ 
+Index: src/main/java/ru/javawebinar/topjava/repository/MealRepository.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/ru/javawebinar/topjava/repository/MealRepository.java	(revision e9c02a9d4997d86654ccbe9d77fe12a5e660d0cb)
++++ src/main/java/ru/javawebinar/topjava/repository/MealRepository.java	(date 1602670415502)
+@@ -5,14 +5,15 @@
+ import java.util.Collection;
+ 
+ public interface MealRepository {
+-    // null if not found, when updated
++    // null if updated meal do not belong to userId
+     Meal save(Meal meal);
+ 
+-    // false if not found
++    // false if meal do not belong to userId
+     boolean delete(int id);
+ 
+-    // null if not found
++    // null if meal do not belong to userId
+     Meal get(int id);
+ 
++    // ORDERED dateTime desc
+     Collection<Meal> getAll();
+ }
