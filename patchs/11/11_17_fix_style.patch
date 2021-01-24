@@ -1,0 +1,59 @@
+Index: src/main/webapp/WEB-INF/jsp/login.jsp
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/webapp/WEB-INF/jsp/login.jsp b/src/main/webapp/WEB-INF/jsp/login.jsp
+--- a/src/main/webapp/WEB-INF/jsp/login.jsp	(revision 654fa4a972564375fd5fb7225b28673879f246c0)
++++ b/src/main/webapp/WEB-INF/jsp/login.jsp	(date 1608713546691)
+@@ -17,12 +17,12 @@
+             <div class="message"><spring:message code="${param.message}"/></div>
+         </c:if>
+         <sec:authorize access="isAnonymous()">
+-            <div class="pt-4">
+-                <a class="btn btn-lg btn-info" href="profile/register"><spring:message code="app.register"/> &raquo;</a>
+-                <button type="submit" class="btn btn-lg btn-primary" onclick="login('user@yandex.ru', 'password')">
++            <div class="pt-2">
++                <a class="btn btn-lg btn-info mt-2" href="profile/register"><spring:message code="app.register"/> &raquo;</a>
++                <button type="submit" class="btn btn-lg btn-primary mt-2" onclick="login('user@yandex.ru', 'password')">
+                     <spring:message code="app.login"/> User
+                 </button>
+-                <button type="submit" class="btn btn-lg btn-primary" onclick="login('admin@gmail.com', 'admin')">
++                <button type="submit" class="btn btn-lg btn-primary mt-2" onclick="login('admin@gmail.com', 'admin')">
+                     <spring:message code="app.login"/> Admin
+                 </button>
+             </div>
+Index: src/main/webapp/WEB-INF/jsp/fragments/headTag.jsp
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/webapp/WEB-INF/jsp/fragments/headTag.jsp b/src/main/webapp/WEB-INF/jsp/fragments/headTag.jsp
+--- a/src/main/webapp/WEB-INF/jsp/fragments/headTag.jsp	(revision 654fa4a972564375fd5fb7225b28673879f246c0)
++++ b/src/main/webapp/WEB-INF/jsp/fragments/headTag.jsp	(date 1608713776531)
+@@ -11,7 +11,7 @@
+     <title><spring:message code="app.title"/></title>
+     <base href="${pageContext.request.contextPath}/"/>
+ 
+-    <link rel="stylesheet" href="resources/css/style.css">
++    <link rel="stylesheet" href="resources/css/style.css?v=2">
+     <link rel="stylesheet" href="webjars/bootstrap/4.5.3/css/bootstrap.min.css">
+     <link rel="stylesheet" href="webjars/noty/3.1.4/demo/font-awesome/css/font-awesome.min.css">
+     <link rel="stylesheet" href="webjars/datatables/1.10.21/css/dataTables.bootstrap4.min.css">
+Index: src/main/webapp/resources/css/style.css
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/webapp/resources/css/style.css b/src/main/webapp/resources/css/style.css
+--- a/src/main/webapp/resources/css/style.css	(revision 654fa4a972564375fd5fb7225b28673879f246c0)
++++ b/src/main/webapp/resources/css/style.css	(date 1608713546683)
+@@ -43,7 +43,7 @@
+     min-height: 100%;
+ }
+ body {
+-    margin-bottom: 60px; /* Margin bottom by footer height */
++    margin-bottom: 60px !important; /* Margin bottom by footer height */
+ }
+ .footer {
+     position: absolute;

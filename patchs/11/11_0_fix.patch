@@ -1,0 +1,45 @@
+Index: src/main/java/ru/javawebinar/topjava/web/interceptor/ModelInterceptor.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/ru/javawebinar/topjava/web/interceptor/ModelInterceptor.java b/src/main/java/ru/javawebinar/topjava/web/interceptor/ModelInterceptor.java
+--- a/src/main/java/ru/javawebinar/topjava/web/interceptor/ModelInterceptor.java	(revision 95df8dff6215e13ff5fc210545b580847666d8b9)
++++ b/src/main/java/ru/javawebinar/topjava/web/interceptor/ModelInterceptor.java	(revision 0bb86b2535155eeeb541591acb9528b41a05bc15)
+@@ -1,7 +1,7 @@
+ package ru.javawebinar.topjava.web.interceptor;
+ 
++import org.springframework.web.servlet.HandlerInterceptor;
+ import org.springframework.web.servlet.ModelAndView;
+-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+ import ru.javawebinar.topjava.AuthorizedUser;
+ import ru.javawebinar.topjava.web.SecurityUtil;
+ 
+@@ -11,7 +11,7 @@
+ /**
+  * This interceptor adds userTo to the model of every requests
+  */
+-public class ModelInterceptor extends HandlerInterceptorAdapter {
++public class ModelInterceptor implements HandlerInterceptor {
+ 
+     @Override
+     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+Index: src/main/webapp/resources/js/topjava.meals.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/webapp/resources/js/topjava.meals.js b/src/main/webapp/resources/js/topjava.meals.js
+--- a/src/main/webapp/resources/js/topjava.meals.js	(revision 95df8dff6215e13ff5fc210545b580847666d8b9)
++++ b/src/main/webapp/resources/js/topjava.meals.js	(revision 0bb86b2535155eeeb541591acb9528b41a05bc15)
+@@ -23,7 +23,9 @@
+             var json = JSON.parse(stringData);
+             if (typeof json === 'object') {
+                 $(json).each(function () {
+-                    this.dateTime = this.dateTime.substr(0, 16).replace('T', ' ');
++                    if (this.hasOwnProperty('dateTime')) {
++                        this.dateTime = this.dateTime.substr(0, 16).replace('T', ' ');
++                    }
+                 });
+             }
+             return json;
