@@ -1,0 +1,60 @@
+Index: src/main/webapp/resources/js/topjava.common.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/webapp/resources/js/topjava.common.js	(revision 5a83f75bde78742faddf31f14abc4fbbb108ec3f)
++++ src/main/webapp/resources/js/topjava.common.js	(date 1606383791026)
+@@ -49,7 +49,7 @@
+     });
+ }
+ 
+-let failedNote;
++var failedNote;
+ 
+ function closeNoty() {
+     if (failedNote) {
+Index: src/main/java/ru/javawebinar/topjava/to/MealTo.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/ru/javawebinar/topjava/to/MealTo.java	(revision 5a83f75bde78742faddf31f14abc4fbbb108ec3f)
++++ src/main/java/ru/javawebinar/topjava/to/MealTo.java	(date 1606383616199)
+@@ -51,9 +51,9 @@
+         MealTo mealTo = (MealTo) o;
+         return calories == mealTo.calories &&
+                 excess == mealTo.excess &&
+-                id.equals(mealTo.id) &&
+-                dateTime.equals(mealTo.dateTime) &&
+-                description.equals(mealTo.description);
++                Objects.equals(id, mealTo.id) &&
++                Objects.equals(dateTime, mealTo.dateTime) &&
++                Objects.equals(description, mealTo.description);
+     }
+ 
+     @Override
+Index: src/test/java/ru/javawebinar/topjava/web/meal/MealRestControllerTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/test/java/ru/javawebinar/topjava/web/meal/MealRestControllerTest.java	(revision 5a83f75bde78742faddf31f14abc4fbbb108ec3f)
++++ src/test/java/ru/javawebinar/topjava/web/meal/MealRestControllerTest.java	(date 1606383905560)
+@@ -20,7 +20,6 @@
+ import static ru.javawebinar.topjava.TestUtil.readFromJson;
+ import static ru.javawebinar.topjava.UserTestData.USER_ID;
+ import static ru.javawebinar.topjava.UserTestData.user;
+-import static ru.javawebinar.topjava.model.AbstractBaseEntity.START_SEQ;
+ import static ru.javawebinar.topjava.util.MealsUtil.createTo;
+ import static ru.javawebinar.topjava.util.MealsUtil.getTos;
+ 
+@@ -54,7 +53,7 @@
+                 .content(JsonUtil.writeValue(updated)))
+                 .andExpect(status().isNoContent());
+ 
+-        MEAL_MATCHER.assertMatch(mealService.get(MEAL1_ID, START_SEQ), updated);
++        MEAL_MATCHER.assertMatch(mealService.get(MEAL1_ID, USER_ID), updated);
+     }
+ 
+     @Test

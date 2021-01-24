@@ -1,0 +1,80 @@
+Index: src/test/java/ru/javawebinar/topjava/web/json/JsonUtilTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/test/java/ru/javawebinar/topjava/web/json/JsonUtilTest.java	(revision af88c473d8ff95f2ffc923ea1bad48262dea1470)
++++ src/test/java/ru/javawebinar/topjava/web/json/JsonUtilTest.java	(date 1606132696000)
+@@ -1,6 +1,7 @@
+ package ru.javawebinar.topjava.web.json;
+ 
+ import org.junit.jupiter.api.Test;
++import ru.javawebinar.topjava.MealTestData;
+ import ru.javawebinar.topjava.model.Meal;
+ 
+ import java.util.List;
+@@ -22,6 +23,6 @@
+         String json = JsonUtil.writeValue(meals);
+         System.out.println(json);
+         List<Meal> meals = JsonUtil.readValues(json, Meal.class);
+-        MEAL_MATCHER.assertMatch(meals, meals);
++        MEAL_MATCHER.assertMatch(meals, MealTestData.meals);
+     }
+ }
+\ No newline at end of file
+Index: src/main/java/ru/javawebinar/topjava/web/user/AdminRestController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/ru/javawebinar/topjava/web/user/AdminRestController.java	(revision af88c473d8ff95f2ffc923ea1bad48262dea1470)
++++ src/main/java/ru/javawebinar/topjava/web/user/AdminRestController.java	(date 1606317573450)
+@@ -16,6 +16,7 @@
+ 
+     static final String REST_URL = "/rest/admin/users";
+ 
++    @Override
+     @GetMapping
+     public List<User> getAll() {
+         return super.getAll();
+@@ -50,6 +51,7 @@
+         super.update(user, id);
+     }
+ 
++    @Override
+     @GetMapping("/by")
+     public User getByMail(@RequestParam String email) {
+         return super.getByMail(email);
+Index: src/main/resources/spring/spring-mvc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/resources/spring/spring-mvc.xml	(revision af88c473d8ff95f2ffc923ea1bad48262dea1470)
++++ src/main/resources/spring/spring-mvc.xml	(date 1606317552541)
+@@ -46,7 +46,7 @@
+     <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource"
+           p:cacheSeconds="5"
+           p:defaultEncoding="UTF-8">
+-        <property name="basenames" value="file:///#{systemEnvironment['TOPJAVA_ROOT']}/config/messages/app"/>
++        <property name="basenames" value="file:///#{systemEnvironment[TOPJAVA_ROOT]}/config/messages/app"/>
+         <property name="fallbackToSystemLocale" value="false"/>
+     </bean>
+ </beans>
+\ No newline at end of file
+Index: src/test/resources/spring/spring-cache.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/test/resources/spring/spring-cache.xml	(revision af88c473d8ff95f2ffc923ea1bad48262dea1470)
++++ src/test/resources/spring/spring-cache.xml	(date 1605780617504)
+@@ -18,7 +18,7 @@
+     <!-- Disabling Hibernate 2-d level cache -->
+     <beans profile="jpa,datajpa">
+         <util:properties id="disableCache">
+-            <prop key="entityManagerFactory.jpaPropertyMap['hibernate.cache.use_second_level_cache']">false</prop>
++            <prop key="entityManagerFactory.jpaPropertyMap[hibernate.cache.use_second_level_cache]">false</prop>
+         </util:properties>
+ 
+         <context:property-override properties-ref="disableCache"/>
